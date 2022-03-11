@@ -1,0 +1,32 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background-color: #B4C5E4;
+}
+
+.calc-container {
+  border: 1px solid #D4D4D2;
+  border-radius: 4px;
+  background-color: 
+}
+
+.btn {
+  background-color: #D4D4D2;
+
+}
+
+.btn-dark {
+  background-color: #505050;
+}
+
+.btn-accent {
+  background-color: #FF9500;
+}
