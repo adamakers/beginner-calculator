@@ -57,6 +57,10 @@ button {
   color: #fff;
 }
 
+.btn:active {
+  filter: brightness(80%);
+}
+
 .btn-dark {
   background-color: #505050;
 }
