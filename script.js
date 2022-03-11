@@ -1,6 +1,8 @@
 const buttons = document.querySelectorAll('.btn');
+const calcDisplay = document.querySelector('.calc-display');
 
 
+let displayValue;
 
 // MATHEMATICAL FUNCTIONS
 function operate(a, b, fn) {
@@ -25,8 +27,17 @@ function divide(a, b) {
 
 // HANDLERS
 function buttonHandler(e) {
-  if (this.classList.contains('num')) {
-    console.log(this.textContent);
+  if (this.dataset.btntype === 'num') {
+    const num = this.textContent;
+    
+    calcDisplay.textContent =  calcDisplay.textContent += num;
+    displayValue = +calcDisplay.textContent;
+  }
+}
+
+function equalHandler(e) {
+  if (this.classList.contains('equal')) {
+
   }
 }
 
