@@ -29,6 +29,8 @@ function divide(a, b) {
   return a / b;
 }
 
+// HANDLERS
+
 function numberHandler(e) {
   const target = e.target;
 
@@ -40,6 +42,10 @@ function numberHandler(e) {
 }
 
 function operatorHandler(e) {
+  if (calculationHolder.prevValue) {
+    equalHandler(e);
+  }
+
   //put number into calcHolder
   calculationHolder.prevValue = displayValue;
   // put operator into calcHolder
@@ -58,21 +64,16 @@ function operatorHandler(e) {
       break;
   }
 
+  // put a flag, if operator pressed, next number button, clears the numbers
   calcDisplayElement.textContent = '';
 }
-
 
 function equalHandler(e) {
   displayValue = operate(calculationHolder.prevValue, displayValue, calculationHolder.operator);
   calcDisplayElement.textContent = displayValue;
-  console.log(displayValue);
+  calculationHolder.prevValue = displayValue;
 }
 
-
-  // put the operation clicked into calcHolder
-  //clear display
-
-// HANDLERS
 function buttonHandler(e) {
   if (this.dataset.btntype === 'equal') {
     equalHandler(e);
@@ -82,7 +83,6 @@ function buttonHandler(e) {
     operatorHandler(e);
   }
 
-  
 }
 
 
