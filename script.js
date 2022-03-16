@@ -46,9 +46,8 @@ function operatorHandler(e) {
     equalHandler(e);
   }
 
-  //put number into calcHolder
   calculationHolder.prevValue = displayValue;
-  // put operator into calcHolder
+  
   switch (e.target.textContent) {
     case '+':
       calculationHolder.operator = add;
