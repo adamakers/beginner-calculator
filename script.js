@@ -5,7 +5,8 @@ const calcDisplayElement = document.querySelector('.calc-display');
 let displayValue;
 let calculationHolder = {
   prevValue: undefined,
-  operator: undefined
+  operator: undefined,
+  opPressed: false
 }
 
 // MATHEMATICAL FUNCTIONS
@@ -30,9 +31,24 @@ function divide(a, b) {
 }
 
 // HANDLERS
+function clearHandler() {
+  //clear the display
+  calcDisplayElement.textContent = '';
+  //clear the prevVal
+  calculationHolder.operator = undefined;
+  //clear the prevOps
+  calculationHolder.prevValue = undefined; 
+}
 
 function numberHandler(e) {
   const target = e.target;
+
+  if (calculationHolder.opPressed) {
+    //clear the display
+    calculationHolder.opPressed = false;
+    displayValue = '';
+    calcDisplayElement.textContent = displayValue;
+  }
 
   if (target.textContent === '.' && displayValue.toString().includes('.')) return;
   const num = target.textContent;
@@ -64,13 +80,15 @@ function operatorHandler(e) {
   }
 
   // put a flag, if operator pressed, next number button, clears the numbers
-  calcDisplayElement.textContent = '';
+  displayValue = '';
+  calculationHolder.opPressed = true;
 }
 
 function equalHandler(e) {
   displayValue = operate(calculationHolder.prevValue, displayValue, calculationHolder.operator);
   calcDisplayElement.textContent = displayValue;
   calculationHolder.prevValue = displayValue;
+  displayValue = '';
 }
 
 function buttonHandler(e) {
@@ -81,6 +99,9 @@ function buttonHandler(e) {
   } else if (this.dataset.btntype === 'oper') {
     operatorHandler(e);
   }
+
+  console.log(`displayValue : ${displayValue}`);
+  console.log(`calcHolder prevVal: ${calculationHolder.prevValue}`);
 
 }
 
