@@ -10,8 +10,18 @@ let calculationHolder = {
 }
 
 // MATHEMATICAL FUNCTIONS
-function operate(a, b, fn) {
-  return fn(a,b);
+function operate(a, b, symbol) {
+
+  switch (symbol) {
+    case '+':
+      return add(a, b);
+    case '-':
+      return subtract(a, b);
+    case '*':
+      return multiply(a, b);
+    case '/':
+      return divide(a, b);
+  }
 }
 
 function add(a, b) {
@@ -32,19 +42,16 @@ function divide(a, b) {
 
 // HANDLERS
 function clearHandler() {
-  //clear the display
+  displayValue = '';
   calcDisplayElement.textContent = '';
-  //clear the prevVal
   calculationHolder.operator = undefined;
-  //clear the prevOps
-  calculationHolder.prevValue = undefined; 
+  calculationHolder.prevValue = undefined;
 }
 
 function numberHandler(e) {
   const target = e.target;
 
   if (calculationHolder.opPressed) {
-    //clear the display
     calculationHolder.opPressed = false;
     displayValue = '';
     calcDisplayElement.textContent = displayValue;
@@ -52,35 +59,21 @@ function numberHandler(e) {
 
   if (target.textContent === '.' && displayValue.toString().includes('.')) return;
   const num = target.textContent;
-  
-  calcDisplayElement.textContent =  calcDisplayElement.textContent += num;
+
+  calcDisplayElement.textContent = calcDisplayElement.textContent += num;
   displayValue = +calcDisplayElement.textContent;
 }
 
 function operatorHandler(e) {
-  if (calculationHolder.prevValue) {
-    equalHandler(e);
+  const operSymbol = e.target.textContent;
+
+  if (calculationHolder.operator) {
+    displayValue = operate(calculationHolder.prevValue, displayValue, calculationHolder.operator);
+    calcDisplayElement.textContent = displayValue;
   }
 
-  calculationHolder.prevValue = displayValue;
-  
-  switch (e.target.textContent) {
-    case '+':
-      calculationHolder.operator = add;
-      break;
-    case '-':
-      calculationHolder.operator = subtract;
-      break;
-    case '*':
-      calculationHolder.operator = multiply;
-      break;
-    case '/':
-      calculationHolder.operator = divide;
-      break;
-  }
-
-  // put a flag, if operator pressed, next number button, clears the numbers
-  displayValue = '';
+  calculationHolder.prevValue = +displayValue;
+  calculationHolder.operator = operSymbol;
   calculationHolder.opPressed = true;
 }
 
@@ -98,19 +91,28 @@ function buttonHandler(e) {
     numberHandler(e);
   } else if (this.dataset.btntype === 'oper') {
     operatorHandler(e);
+  } else if (this.dataset.btntype === 'clear') {
+    clearHandler();
   }
 
   console.log(`displayValue : ${displayValue}`);
   console.log(`calcHolder prevVal: ${calculationHolder.prevValue}`);
-
+  console.log(`calcHolder oper: ${calculationHolder.operator}`);
 }
 
 
 
-
-
-
-
-buttons.forEach( button => {
+buttons.forEach(button => {
   button.addEventListener('click', buttonHandler)
-})
+});
+
+
+/*
+TODO:
+
+1. if user inputs buttons after an equal, clear everything
+2. if user inputs operator twice throw a bug
+3. 
+
+
+*/
