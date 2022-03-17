@@ -2,6 +2,8 @@
 const numberButtons = document.querySelectorAll('.btn-num');
 const operatorButtons = document.querySelectorAll('.btn-oper');
 
+const equalBtn = document.querySelector('.btn-equal');
+
 const calcDisplayElement = document.querySelector('.calc-display');
 
 let displayValue;
@@ -43,34 +45,51 @@ function operate(a, b, symbol) {
   }
 }
 
-//HELPERS
-
 // HANDLERS
-function clearHandler() {
-  displayValue = 0;
-  calcDisplayElement.textContent = '';
-  calculator.operator = undefined;
+function clear() {
   calculator.prevValue = undefined;
 }
 
 //Handles the number buttons on the calculator
 function numberHandler(e) {
+  const numberValue = e.target.textContent;
 
-  const target = e.target;
-  const targetValue = target.textContent;
-
-  calculator.currValue += targetValue;
+  calculator.currValue += numberValue;
 
   calcDisplayElement.textContent = calculator.currValue;
 }
 
 //Handles the operator buttons
 function operatorHandler(e) {
+  const clickedOperator = e.target.textContent;
+  console.log('operator');
+  console.log(calculator);
 
+  if (calculator.prevValue) {
+    const resolvedValue = operate(+calculator.prevValue, +calculator.currValue, calculator.operator);
+
+    calculator.prevValue = resolvedValue;
+    calcDisplayElement.textContent = resolvedValue;
+  } else {
+    calculator.prevValue = calculator.currValue;
+  }
+
+  calculator.currValue = '';
+  calculator.operator = clickedOperator;
 }
 
 //Handles the equal button
-function equalHandler(e) {
+function equal() {
+  const resolvedValue = operate(+calculator.prevValue, +calculator.currValue, calculator.operator);
+
+  calculator.prevValue = resolvedValue.toString();
+
+  calcDisplayElement.textContent = resolvedValue;
+
+  calculator.prevValue = resolvedValue;
+  calculator.currValue = '';
+  console.log('equals');
+  console.log(calculator);
 
 }
 
@@ -84,6 +103,8 @@ operatorButtons.forEach(btn => {
   btn.addEventListener('click', operatorHandler);
 });
 
+equalBtn.addEventListener('click', equal);
+
 
 /*
 TODO:
@@ -94,6 +115,6 @@ TODO:
 2. if user inputs operator twice throw a bug
 3. Pressing = before entering all of the numbers or an operator could cause problems!
 4. Display a snarky error message if the user tries to divide by 0… don’t let it crash your calculator!
-
+5. make it so user cant hit 0 and get 0000000 on display
 
 */
