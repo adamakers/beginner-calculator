@@ -3,6 +3,7 @@ const numberButtons = document.querySelectorAll('.btn-num');
 const operatorButtons = document.querySelectorAll('.btn-oper');
 
 const equalBtn = document.querySelector('.btn-equal');
+const clearBtn = document.querySelector('.btn-clear');
 
 const calcDisplayElement = document.querySelector('.calc-display');
 
@@ -47,7 +48,11 @@ function operate(a, b, symbol) {
 
 // HANDLERS
 function clear() {
+  calculator.currValue = '';
   calculator.prevValue = undefined;
+  calculator.operator = undefined;
+
+  calcDisplayElement.textContent = '0';
 }
 
 //Handles the number buttons on the calculator
@@ -62,8 +67,6 @@ function numberHandler(e) {
 //Handles the operator buttons
 function operatorHandler(e) {
   const clickedOperator = e.target.textContent;
-  console.log('operator');
-  console.log(calculator);
 
   if (calculator.prevValue) {
     const resolvedValue = operate(+calculator.prevValue, +calculator.currValue, calculator.operator);
@@ -86,11 +89,9 @@ function equal() {
 
   calcDisplayElement.textContent = resolvedValue;
 
-  calculator.prevValue = resolvedValue;
-  calculator.currValue = '';
-  console.log('equals');
-  console.log(calculator);
-
+  calculator.currValue = resolvedValue;
+  calculator.prevValue = '';
+  calculator.operator = undefined;
 }
 
 // EVENT LISTENERS
@@ -105,16 +106,20 @@ operatorButtons.forEach(btn => {
 
 equalBtn.addEventListener('click', equal);
 
+clearBtn.addEventListener('click', clear);
+
 
 /*
 TODO:
 
-1. if user inputs buttons after an equal, clear everything
+1. decimals
+
+2. if user inputs buttons after an equal, clear everything
   * set a flag after equal sign?
 
-2. if user inputs operator twice throw a bug
-3. Pressing = before entering all of the numbers or an operator could cause problems!
-4. Display a snarky error message if the user tries to divide by 0… don’t let it crash your calculator!
-5. make it so user cant hit 0 and get 0000000 on display
+3. if user inputs operator twice throw a bug
+4. Pressing = before entering all of the numbers or an operator could cause problems!
+5. Display a snarky error message if the user tries to divide by 0… don’t let it crash your calculator!
+6. make it so user cant hit 0 and get 0000000 on display
 
 */
