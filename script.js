@@ -1,7 +1,10 @@
+// ELEMENTS
+const numberBtns = document.querySelectorAll('.btn-num');
+const operatorBtns = document.querySelectorAll('.btn-oper');
 
+// GLOBAL VARS
 
 // MATHEMATICAL FUNCTIONS
-
 function add(a, b) {
   return a + b;
 }
@@ -33,3 +36,7 @@ function operate(a, b, symbol) {
 }
 
 //HELPERS
+
+//handler for numbers
+  //add number to display
+  //put display number in var
