@@ -7,23 +7,10 @@ let calculationHolder = {
   prevValue: undefined,
   operator: undefined,
   opPressed: false,
-  equalValue: false,
+  equalPressed: false,
 }
 
 // MATHEMATICAL FUNCTIONS
-function operate(a, b, symbol) {
-
-  switch (symbol) {
-    case '+':
-      return add(a, b);
-    case '-':
-      return subtract(a, b);
-    case '*':
-      return multiply(a, b);
-    case '/':
-      return divide(a, b);
-  }
-}
 
 function add(a, b) {
   return a + b;
@@ -41,10 +28,22 @@ function divide(a, b) {
   return a / b;
 }
 
-//HELPERS
-function divideByZeroError() {
-  // if ()
+function operate(a, b, symbol) {
+
+  switch (symbol) {
+    case '+':
+      return add(a, b);
+    case '-':
+      return subtract(a, b);
+    case '*':
+      return multiply(a, b);
+    case '/':
+      return divide(a, b);
+  }
 }
+
+//HELPERS
+
 
 // HANDLERS
 function clearHandler() {
@@ -57,11 +56,6 @@ function clearHandler() {
 //Handles the number buttons on the calculator
 function numberHandler(e) {
   const target = e.target;
-
-  if (calculationHolder.finalValue) {
-    clearHandler();
-    calculationHolder.finalValue = false;
-  }
 
   if (calculationHolder.opPressed) {
     calculationHolder.opPressed = false;
@@ -79,9 +73,8 @@ function numberHandler(e) {
 
 //Handles the operator buttons
 function operatorHandler(e) {
+
   const operSymbol = e.target.textContent;
-
-
 
   if (calculationHolder.operator) {
     displayValue = operate(calculationHolder.prevValue, displayValue, calculationHolder.operator);
@@ -96,10 +89,11 @@ function operatorHandler(e) {
 //Handles the equal button
 function equalHandler(e) {
   displayValue = operate(calculationHolder.prevValue, displayValue, calculationHolder.operator);
-  calculationHolder.prevValue = displayValue;
   calcDisplayElement.textContent = displayValue;
+
+  calculationHolder.prevValue = displayValue;
   displayValue = 0;
-  calculationHolder.finalValue = true;
+  calculationHolder.equalPressed = true;
 }
 
 //The core button handler.  The event delegator
@@ -125,12 +119,8 @@ buttons.forEach(button => {
 /*
 TODO:
 
-1. if user inputs buttons after an equal, clear everything
-  * set a flag after equal sign?
-
 2. if user inputs operator twice throw a bug
 3. Pressing = before entering all of the numbers or an operator could cause problems!
 4. Display a snarky error message if the user tries to divide by 0… don’t let it crash your calculator!
-
 
 */
