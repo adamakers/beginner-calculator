@@ -57,6 +57,7 @@ button {
   color: #fff;
 }
 
+
 .btn:active {
   filter: brightness(80%);
 }
@@ -67,6 +68,10 @@ button {
 
 .btn-accent {
   background-color: #FF9500;
+}
+
+.btn-accent.pressed {
+  background-color: #ff9500b4
 }
 
 .btn-wide {
