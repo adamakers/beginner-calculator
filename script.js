@@ -12,6 +12,7 @@ let calculator = {
   currValue: '',
   prevValue: undefined,
   operator: undefined,
+  equalPressed: false
 }
 
 // MATHEMATICAL FUNCTIONS
@@ -46,8 +47,17 @@ function operate(a, b, symbol) {
   }
 }
 
+// HELPERS
+function clearOperatorPressedClass() {
+  operatorButtons.forEach(btn => {
+    btn.classList.remove('pressed');
+  });
+}
+
 // HANDLERS
 function clear() {
+  clearOperatorPressedClass()
+
   calculator.currValue = '';
   calculator.prevValue = undefined;
   calculator.operator = undefined;
@@ -57,15 +67,44 @@ function clear() {
 
 //Handles the number buttons on the calculator
 function numberHandler(e) {
+
+  clearOperatorPressedClass()
+
+  if (calculator.equalPressed) {
+    calculator.equalPressed = false;
+    clear();
+  }
+
   const numberValue = e.target.textContent;
 
+  if (numberValue === '.' && calculator.currValue.includes('.')) return;
+
   calculator.currValue += numberValue;
+
+  //remove leading 0 if it shows up
+  if (calculator.currValue.length > 1 && calculator.currValue[0] === '0') {
+    calculator.currValue = calculator.currValue.slice(1);
+  }
 
   calcDisplayElement.textContent = calculator.currValue;
 }
 
 //Handles the operator buttons
 function operatorHandler(e) {
+
+  if (e.target.classList.contains('pressed')) {
+    return;
+  }
+  e.target.classList.add('pressed');
+
+  //check if divide by zero
+  if (calculator.operator === '/' && +calculator.currValue === 0) {
+    alert('You cannot divide by zero');
+    return;
+  }
+
+  calculator.equalPressed = false;
+
   const clickedOperator = e.target.textContent;
 
   if (calculator.prevValue) {
@@ -83,7 +122,21 @@ function operatorHandler(e) {
 
 //Handles the equal button
 function equal() {
+
+  clearOperatorPressedClass()
+
+  //if no value for prevvalue, make the prevValue same as currValue
+  if (!calculator.currValue) {
+    calculator.currValue = calculator.prevValue;
+  }
+
   const resolvedValue = operate(+calculator.prevValue, +calculator.currValue, calculator.operator);
+
+  //check if divide by zero
+  if (calculator.operator === '/' && +calculator.currValue === 0) {
+    alert('You cannot divide by zero');
+    return;
+  }
 
   calculator.prevValue = resolvedValue.toString();
 
@@ -92,10 +145,10 @@ function equal() {
   calculator.currValue = resolvedValue;
   calculator.prevValue = '';
   calculator.operator = undefined;
+  calculator.equalPressed = true;
 }
 
 // EVENT LISTENERS
-
 numberButtons.forEach(btn => {
   btn.addEventListener('click', numberHandler);
 });
@@ -112,14 +165,6 @@ clearBtn.addEventListener('click', clear);
 /*
 TODO:
 
-1. decimals
-
-2. if user inputs buttons after an equal, clear everything
-  * set a flag after equal sign?
-
 3. if user inputs operator twice throw a bug
-4. Pressing = before entering all of the numbers or an operator could cause problems!
-5. Display a snarky error message if the user tries to divide by 0… don’t let it crash your calculator!
-6. make it so user cant hit 0 and get 0000000 on display
 
 */
