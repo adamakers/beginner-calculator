@@ -9,7 +9,7 @@ const calcDisplayElement = document.querySelector('.calc-display');
 
 let displayValue;
 let calculator = {
-  currValue: '',
+  currValue: 0,
   prevValue: undefined,
   operator: undefined,
   equalPressed: false
@@ -58,7 +58,7 @@ function clearOperatorPressedClass() {
 function clear() {
   clearOperatorPressedClass()
 
-  calculator.currValue = '';
+  calculator.currValue = 0;
   calculator.prevValue = undefined;
   calculator.operator = undefined;
 
@@ -68,7 +68,7 @@ function clear() {
 //Handles the number buttons on the calculator
 function numberHandler(e) {
 
-  clearOperatorPressedClass()
+  // clearOperatorPressedClass();
 
   if (calculator.equalPressed) {
     calculator.equalPressed = false;
@@ -91,7 +91,8 @@ function numberHandler(e) {
 
 //Handles the operator buttons
 function operatorHandler(e) {
-
+  calculator.equalPressed = false;
+  //if 
   if (e.target.classList.contains('pressed')) {
     return;
   }
@@ -102,8 +103,6 @@ function operatorHandler(e) {
     alert('You cannot divide by zero');
     return;
   }
-
-  calculator.equalPressed = false;
 
   const clickedOperator = e.target.textContent;
 
@@ -123,7 +122,7 @@ function operatorHandler(e) {
 //Handles the equal button
 function equal() {
 
-  clearOperatorPressedClass()
+  // clearOperatorPressedClass();
 
   //if no value for prevvalue, make the prevValue same as currValue
   if (!calculator.currValue) {
@@ -138,12 +137,12 @@ function equal() {
     return;
   }
 
-  calculator.prevValue = resolvedValue.toString();
+  calculator.prevValue = resolvedValue;
 
   calcDisplayElement.textContent = resolvedValue;
 
   calculator.currValue = resolvedValue;
-  calculator.prevValue = '';
+  calculator.prevValue = 0;
   calculator.operator = undefined;
   calculator.equalPressed = true;
 }
@@ -165,6 +164,13 @@ clearBtn.addEventListener('click', clear);
 /*
 TODO:
 
-3. if user inputs operator twice throw a bug
+in the operatorHandler:
+if any button has the pressed class, only change the calculator.operator property
+
+1. change nodelist to array to access array methods
+2. Array.some() to see if one contains the class
+3.  if true, allow the calculation,
+4. else, just change the calculator.operator
+
 
 */
