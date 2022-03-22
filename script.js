@@ -58,6 +58,11 @@ function percentHandler() {
   calcDisplayElement.textContent = calculator.currValue;
 }
 
+function posNegHandler() {
+  calculator.currValue = calculator.currValue * (-1);
+  calcDisplayElement.textContent = calculator.currValue;
+
+}
 
 function clear() {
 
@@ -176,6 +181,8 @@ equalBtn.addEventListener('click', equal);
 clearBtn.addEventListener('click', clear);
 
 percentBtn.addEventListener('click', percentHandler);
+
+posNegBtn.addEventListener('click', posNegHandler);
 
 /*
 TODO:
