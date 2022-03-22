@@ -48,15 +48,10 @@ function operate(a, b, symbol) {
 }
 
 // HELPERS
-function clearOperatorPressedClass() {
-  operatorButtons.forEach(btn => {
-    btn.classList.remove('pressed');
-  });
-}
+
 
 // HANDLERS
 function clear() {
-  clearOperatorPressedClass()
 
   calculator.currValue = 0;
   calculator.prevValue = undefined;
@@ -67,8 +62,6 @@ function clear() {
 
 //Handles the number buttons on the calculator
 function numberHandler(e) {
-
-  // clearOperatorPressedClass();
 
   if (calculator.equalPressed) {
     calculator.equalPressed = false;
@@ -91,20 +84,31 @@ function numberHandler(e) {
 
 //Handles the operator buttons
 function operatorHandler(e) {
+  const clickedOperator = e.target.textContent;
+
+  const opBtnsArr = Array.from(operatorButtons);
+  const pressedExists = opBtnsArr.some(btn => btn.classList.contains('pressed'));
+
   calculator.equalPressed = false;
-  //if 
+
+  if (pressedExists) {
+    operatorButtons.forEach(btn => btn.classList.remove('pressed'));
+    calculator.operator = clickedOperator;
+  }
+
+  if (calculator.operator === '/' && +calculator.currValue === 0) {
+    alert('You cannot divide by zero');
+    console.log(calculator);
+    return;
+  }
+
+
   if (e.target.classList.contains('pressed')) {
     return;
   }
   e.target.classList.add('pressed');
 
   //check if divide by zero
-  if (calculator.operator === '/' && +calculator.currValue === 0) {
-    alert('You cannot divide by zero');
-    return;
-  }
-
-  const clickedOperator = e.target.textContent;
 
   if (calculator.prevValue) {
     const resolvedValue = operate(+calculator.prevValue, +calculator.currValue, calculator.operator);
@@ -122,7 +126,6 @@ function operatorHandler(e) {
 //Handles the equal button
 function equal() {
 
-  // clearOperatorPressedClass();
 
   //if no value for prevvalue, make the prevValue same as currValue
   if (!calculator.currValue) {
@@ -145,6 +148,8 @@ function equal() {
   calculator.prevValue = 0;
   calculator.operator = undefined;
   calculator.equalPressed = true;
+
+  operatorButtons.forEach(btn => btn.classList.remove('pressed'));
 }
 
 // EVENT LISTENERS
