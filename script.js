@@ -18,7 +18,6 @@ let calculator = {
 }
 
 // MATHEMATICAL FUNCTIONS
-
 function add(a, b) {
   return a + b;
 }
@@ -36,7 +35,6 @@ function divide(a, b) {
 }
 
 function operate(a, b, symbol) {
-
   switch (symbol) {
     case '+':
       return add(a, b);
@@ -48,9 +46,6 @@ function operate(a, b, symbol) {
       return divide(a, b);
   }
 }
-
-// HELPERS
-
 
 // HANDLERS
 function percentHandler() {
@@ -65,7 +60,6 @@ function posNegHandler() {
 }
 
 function clear() {
-
   calculator.currValue = 0;
   calculator.prevValue = undefined;
   calculator.operator = undefined;
@@ -75,7 +69,6 @@ function clear() {
 
 //Handles the number buttons on the calculator
 function numberHandler(e) {
-
   if (calculator.equalPressed) {
     calculator.equalPressed = false;
     clear();
@@ -121,10 +114,10 @@ function operatorHandler(e) {
   //check if divide by zero
   if (calculator.operator === '/' && +calculator.currValue === 0) {
     alert('You cannot divide by zero');
-    console.log(calculator);
     return;
   }
 
+  // if there is a previous value that needs to be operated. else, just update curr and prev val
   if (calculator.prevValue) {
     const resolvedValue = operate(+calculator.prevValue, +calculator.currValue, calculator.operator);
 
@@ -140,8 +133,6 @@ function operatorHandler(e) {
 
 //Handles the equal button
 function equal() {
-
-
   //if no value for prevvalue, make the prevValue same as currValue
   if (!calculator.currValue) {
     calculator.currValue = calculator.prevValue;
@@ -177,17 +168,6 @@ operatorButtons.forEach(btn => {
 });
 
 equalBtn.addEventListener('click', equal);
-
 clearBtn.addEventListener('click', clear);
-
 percentBtn.addEventListener('click', percentHandler);
-
 posNegBtn.addEventListener('click', posNegHandler);
-
-/*
-TODO:
-
-1: when clicking 'divide' btn, and then choosing a differetn operator, error will show and reset currValue to zero
-
-
-*/
