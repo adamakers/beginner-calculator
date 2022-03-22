@@ -4,6 +4,8 @@ const operatorButtons = document.querySelectorAll('.btn-oper');
 
 const equalBtn = document.querySelector('.btn-equal');
 const clearBtn = document.querySelector('.btn-clear');
+const percentBtn = document.querySelector('.btn-percent');
+const posNegBtn = document.querySelector('.btn-posneg');
 
 const calcDisplayElement = document.querySelector('.calc-display');
 
@@ -51,6 +53,12 @@ function operate(a, b, symbol) {
 
 
 // HANDLERS
+function percentHandler() {
+  calculator.currValue = calculator.currValue * 0.01;
+  calcDisplayElement.textContent = calculator.currValue;
+}
+
+
 function clear() {
 
   calculator.currValue = 0;
@@ -91,24 +99,26 @@ function operatorHandler(e) {
 
   calculator.equalPressed = false;
 
+  // if operator already selected, only update operator in calculator and add class
   if (pressedExists) {
     operatorButtons.forEach(btn => btn.classList.remove('pressed'));
     calculator.operator = clickedOperator;
+    e.target.classList.add('pressed');
+    return;
   }
 
+  if (e.target.classList.contains('pressed')) {
+    return;
+  }
+
+  e.target.classList.add('pressed');
+
+  //check if divide by zero
   if (calculator.operator === '/' && +calculator.currValue === 0) {
     alert('You cannot divide by zero');
     console.log(calculator);
     return;
   }
-
-
-  if (e.target.classList.contains('pressed')) {
-    return;
-  }
-  e.target.classList.add('pressed');
-
-  //check if divide by zero
 
   if (calculator.prevValue) {
     const resolvedValue = operate(+calculator.prevValue, +calculator.currValue, calculator.operator);
@@ -165,17 +175,12 @@ equalBtn.addEventListener('click', equal);
 
 clearBtn.addEventListener('click', clear);
 
+percentBtn.addEventListener('click', percentHandler);
 
 /*
 TODO:
 
-in the operatorHandler:
-if any button has the pressed class, only change the calculator.operator property
-
-1. change nodelist to array to access array methods
-2. Array.some() to see if one contains the class
-3.  if true, allow the calculation,
-4. else, just change the calculator.operator
+1: when clicking 'divide' btn, and then choosing a differetn operator, error will show and reset currValue to zero
 
 
 */
